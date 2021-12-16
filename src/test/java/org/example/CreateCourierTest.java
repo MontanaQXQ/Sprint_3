@@ -14,14 +14,14 @@ import static org.hamcrest.Matchers.*;
 
 public class CreateCourierTest {
 
-    ScooterRegisterCourier generatorOfCouriers = new ScooterRegisterCourier();
+
 
     @Before
     public void setUp() {
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
 
     }
-/*
+
     @After
     public void tearDown() {
         File json = new File("src/test/resources/loginCourier.json");
@@ -35,16 +35,19 @@ public class CreateCourierTest {
                         .post("/api/v1/courier/login");
         response.then().extract().body().path("id");
         int curierId = response.then().extract().body().path("id");
-        System.out.println(curierId);
+        System.out.println("Получил Айди курьера = " + curierId);
         given()
                 .delete("/api/v1/courier/{curierId}", curierId )
                 .then().assertThat().statusCode(200);
+        System.out.println("Удалил курьера id = " +  curierId);
+        System.out.println("----------------------------------------------------------------");
 
     }
-*/
+
 
     @Test
     public void testCourierCanCreate() {
+        System.out.println("Проверяю что курьера можно создать");
         File json = new File("src/test/resources/newCourier.json");
         Response response =
                 given()
@@ -55,18 +58,44 @@ public class CreateCourierTest {
                         .post("/api/v1/courier");
         response.then().assertThat()
                 .statusCode(201);
+        System.out.println(response.getStatusCode());
+
     }
-
-
 
     @Test
     public void testCantCreateSameCourier() {
-        ScooterRegisterCourier createCourier = new ScooterRegisterCourier();
-        createCourier.registerNewCourierAndReturnLoginPassword();
-        System.out.println(createCourier.registerNewCourierAndReturnLoginPassword());
+        System.out.println("проверяю что нельзя содать одного и того же курьера");
+        File json = new File("src/test/resources/newCourier.json");
+        Response response =
+                given()
+                        .header("Content-type", "application/json")
+                        .and()
+                        .body(json)
+                        .when()
+                        .post("/api/v1/courier");
+        response.then().assertThat()
+                .statusCode(201);
+        System.out.println( response.getBody().asString() + " Создал первого курьера");
+        System.out.println(response.getStatusCode());
+
+
+        Response responseTwo =
+                given()
+                        .header("Content-type", "application/json")
+                        .and()
+                        .body(json)
+                        .when()
+                        .post("/api/v1/courier");
+        responseTwo.then().assertThat()
+                .statusCode(409);
+        System.out.println(responseTwo.getBody().asString() + "Попытка создать второго курьера с тем же логином");
+        System.out.println(responseTwo.getStatusCode());
+
     }
 
-
 }
+
+
+
 
 
