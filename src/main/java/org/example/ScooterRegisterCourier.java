@@ -43,7 +43,7 @@ public class ScooterRegisterCourier {
         if (response.statusCode() == 201) {
             loginPass.add(courierLogin);
             loginPass.add(courierPassword);
-            loginPass.add(courierFirstName);
+
 
         }
 
