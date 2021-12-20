@@ -44,6 +44,7 @@ public class ScooterRegisterCourier {
             loginPass.add(courierLogin);
             loginPass.add(courierPassword);
             loginPass.add(courierFirstName);
+
         }
 
         // возвращаем список
