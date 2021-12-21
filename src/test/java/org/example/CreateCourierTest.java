@@ -182,7 +182,7 @@ public class CreateCourierTest {
                         .body(json)
                         .when()
                         .post(createCourier);
-        response.then().assertThat()
+         response.then().assertThat()
                 .statusCode(400)
                 .and().body("message", is("Недостаточно данных для создания учетной записи"));
         System.out.println(response.getStatusCode());
