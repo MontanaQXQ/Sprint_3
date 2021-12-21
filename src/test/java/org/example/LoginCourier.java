@@ -50,7 +50,7 @@ public class LoginCourier {
     }
 
     @Test
-    public void testCourierCanCreate() {
+    public void testCourierLogin() {
         System.out.println("Кейс: Курьер может авторизоваться");
 
                 int id=given()
@@ -82,9 +82,28 @@ public class LoginCourier {
     }
 
     @Test
+    public void testSystemErrorWithIncorrectPassword() {
+        System.out.println("Кейс: система вернёт ошибку, если неправильно указать логин или пароль");
+        System.out.println("Указываем некорректный пароль");
+
+        Response response =
+                given()
+                        .header("Content-type", "application/json")
+                        .and()
+                        .body(new AuthCourier(currentCourier.login,"****WrongPassword****"))
+                        .when()
+                        .post(loginCourier);
+                        response.then().assertThat().statusCode(404)
+                        .and().body("message", is("Учетная запись не найдена"));
+        System.out.println(response.getBody().asString() + " Авторизация курьера");
+        System.out.println(response.getStatusCode());
+
+    }
+
+    @Test
     public void testSystemErrorWithIncorrectLogin() {
-        System.out.println("Кейс: система вернёт ошибку, если неправильно указать логин или пароль;");
-        System.out.println("Указываем некорректный логин");
+        System.out.println("Кейс: система вернёт ошибку, если неправильно указать логин или пароль");
+        System.out.println("Указываем некорректный Логин");
 
         Response response =
                 given()
@@ -93,10 +112,64 @@ public class LoginCourier {
                         .body(new AuthCourier("****WrongLogin****",currentCourier.password))
                         .when()
                         .post(loginCourier);
-                        response.then().assertThat().statusCode(404)
-                        .and().body("message", is("Учетная запись не найдена"));
+        response.then().assertThat().statusCode(404)
+                .and().body("message", is("Учетная запись не найдена"));
         System.out.println(response.getBody().asString() + " Авторизация курьера");
         System.out.println(response.getStatusCode());
+
+    }
+
+    @Test
+    public void testAuthWithNullField() {
+        System.out.println("Кейс: если какого-то поля нет, запрос возвращает ошибку");
+
+        Response response =
+                given()
+                        .header("Content-type", "application/json")
+                        .and()
+                        .body(new AuthCourier("",currentCourier.password))
+                        .when()
+                        .post(loginCourier);
+        response.then().assertThat().statusCode(400)
+                .and().body("message", is("Недостаточно данных для входа"));
+        System.out.println(response.getBody().asString() + " Авторизация курьера");
+        System.out.println(response.getStatusCode());
+
+    }
+
+    @Test
+    public void testNonExistUser() {
+        System.out.println("Кейс:если авторизоваться под несуществующим пользователем, запрос возвращает ошибку");
+
+        Response response =
+                given()
+                        .header("Content-type", "application/json")
+                        .and()
+                        .body(new AuthCourier("NonExsistUser3000","NonExsistPassword3000"))
+                        .when()
+                        .post(loginCourier);
+        response.then().assertThat().statusCode(404)
+                .and().body("message", is("Учетная запись не найдена"));
+        System.out.println(response.getBody().asString() + " Авторизация курьера");
+        System.out.println(response.getStatusCode());
+
+    }
+
+    @Test
+    public void testLoginCourierreturnId() {
+        System.out.println("Успешный запрос возвращает id");
+
+        int id=given()
+                .header("Content-type", "application/json")
+                .and()
+                .body(currentCourier)
+                .when()
+                .post(loginCourier)
+                .then().assertThat().statusCode(200)
+                .and().extract().body().path("id");
+        assert id != 0;
+        assertEquals(id,currentCourier.id);
+        System.out.println("Курьер авторизовался." + "\n" + "Айди курьера = " + currentCourier.id);
 
     }
 
@@ -124,7 +197,6 @@ public class LoginCourier {
                 .and().extract().body().path("id");
         courier.id=id;
     }
-
 
 }
 
