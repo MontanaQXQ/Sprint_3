@@ -283,38 +283,7 @@ public class CreateCourierTest {
         assert statusCodeSecondCourier != 201;
 
     }
-
-    @Test
-    public void testDelete() {
-        File json = new File("src/test/resources/loginSameFirstNameCourier.json.");
-
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(json)
-                        .when()
-                        .post(loginCourier);
-        response.then().extract().body().path("id");
-        int courierId = response.then().extract().body().path("id");
-        if (courierId !=0) {
-            System.out.println("Получил Айди курьера = " + courierId);
-            given()
-                    .delete(deleteCourier, courierId)
-                    .then().assertThat().statusCode(200)
-                    .and().body("ok", is(true));
-            System.out.println("Удалил курьера(After метод) id = " + courierId);
-            System.out.println(response.getStatusCode());
-            System.out.println("----------------------------------------------------------------");
-
-        } else {
-
-            System.out.println("Айди курьера не был получен = " + courierId);
-        }
-    }
 */
-
-
 
 }
 

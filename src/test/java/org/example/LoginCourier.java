@@ -3,25 +3,20 @@ package org.example;
 
 import io.restassured.response.Response;
 import io.restassured.RestAssured;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.File;
-import org.junit.Assert;
 import java.util.ArrayList;
 
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.responseSpecification;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 
 public class LoginCourier {
 
     ScooterRegisterCourier createCourier = new ScooterRegisterCourier();
-    private AuthCourier currentCourier;
+    private AuthCourier  currentCourier;
     String loginCourier = "/api/v1/courier/login";
     String deleteCourier = "/api/v1/courier/{curierId}";
 
@@ -156,7 +151,7 @@ public class LoginCourier {
     }
 
     @Test
-    public void testLoginCourierreturnId() {
+    public void testLoginCourierReturnId() {
         System.out.println("Успешный запрос возвращает id");
 
         int id=given()
