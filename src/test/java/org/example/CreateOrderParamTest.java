@@ -13,7 +13,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 import java.util.List;
 import io.restassured.RestAssured;
-import java.util.ArrayList;
+
 
 
 @RunWith(Parameterized.class)
@@ -25,7 +25,6 @@ public class CreateOrderParamTest {
 
     @Before
     public void setUp() {
-     //  orderClient = new OrderClient();
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
     }
 
@@ -50,7 +49,6 @@ public class CreateOrderParamTest {
         };
     }
 
-   // OrderClient orderClient;
 
     @Test
     @DisplayName("Создание заказа. Позитивный сценарий.")
@@ -70,13 +68,7 @@ public class CreateOrderParamTest {
              .body("track", expected);
         System.out.println(response.getBody().asString());
         System.out.println(response.getStatusCode());
-        /*
-        orderClient.createOrder(order);
-        response.then().assertThat().statusCode(201)
-               .and()
-               .body("track", expected);
 
-         */
     }
 
 

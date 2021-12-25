@@ -1,6 +1,6 @@
 package org.example;
 
-import io.restassured.RestAssured;
+
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import java.util.ArrayList;
