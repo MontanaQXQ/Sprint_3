@@ -1,6 +1,7 @@
 package org.example;
 
 import io.qameta.allure.Description;
+import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.hamcrest.Matcher;
@@ -22,7 +23,7 @@ public class CreateOrderParamTest {
 
 
     String makeOrder = "/api/v1/orders";
-
+    @Step("Метод setUP:Base URL - http://qa-scooter.praktikum-services.ru/")
     @Before
     public void setUp() {
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
@@ -37,7 +38,7 @@ public class CreateOrderParamTest {
 
     }
 
-
+    @Step("Метод в котором я проверяю разные значения Color")
     @Parameterized.Parameters
     public static Object[][] getData() {
         return new Object[][]{
@@ -52,7 +53,7 @@ public class CreateOrderParamTest {
 
     @Test
     @DisplayName("Создание заказа. Позитивный сценарий.")
-    @Description("Проверяем,что заказ создается в разными комбинациями color.")
+    @Description("Проверяем,что заказ создается с разными значениями поля color.")
     public void createOrder() {
         Order order = new Order(color);
 

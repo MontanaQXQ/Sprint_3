@@ -1,6 +1,9 @@
 package org.example;
 
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import io.restassured.RestAssured;
 import org.junit.After;
@@ -13,7 +16,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 
-public class LoginCourier {
+public class LoginCourierTest {
 
     ScooterRegisterCourier createCourier = new ScooterRegisterCourier();
     private AuthCourier  currentCourier;
@@ -21,14 +24,14 @@ public class LoginCourier {
     String deleteCourier = "/api/v1/courier/{curierId}";
 
 
-
+    @Step("Метод setUP:Base URL - http://qa-scooter.praktikum-services.ru/")
     @Before
     public void setUp() {
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
        currentCourier=getCorrectAuth();
 
     }
-
+    @Step("Метод @AFTER :Проверяю if (currentCourier.id > 0) тогда   DELETE /api/v1/courier/{curierId}")
     @After
     public void tearDown() {
         if (currentCourier.id > 0) {
@@ -45,6 +48,8 @@ public class LoginCourier {
     }
 
     @Test
+    @DisplayName("Кейс: Проверяю что Курьер может авторизоваться")
+    @Description("Отправляю POST /api/v1/courier/login")
     public void testCourierLogin() {
         System.out.println("Кейс: Курьер может авторизоваться");
 
@@ -62,6 +67,8 @@ public class LoginCourier {
         }
 
     @Test
+    @DisplayName("Кейс: для авторизации нужно передать все обязательные поля")
+    @Description("Отправляю все обязательные поля")
     public void testCourierAuthWithRequiredFields() {
         System.out.println("Кейс: для авторизации нужно передать все обязательные поля");
 
@@ -77,6 +84,8 @@ public class LoginCourier {
     }
 
     @Test
+    @DisplayName("Кейс: система вернёт ошибку, если неправильно указать логин или пароль")
+    @Description("Указываю некорректный Пароль.Должен вернуться статус код 404 с телом (message:Учетная запись не найдена)")
     public void testSystemErrorWithIncorrectPassword() {
         System.out.println("Кейс: система вернёт ошибку, если неправильно указать логин или пароль");
         System.out.println("Указываем некорректный пароль");
@@ -96,6 +105,8 @@ public class LoginCourier {
     }
 
     @Test
+    @DisplayName("Кейс: система вернёт ошибку, если неправильно указать логин или пароль")
+    @Description("Указываю некорректный Логин.Должен вернуться статус код 404 с телом (message:Учетная запись не найдена)")
     public void testSystemErrorWithIncorrectLogin() {
         System.out.println("Кейс: система вернёт ошибку, если неправильно указать логин или пароль");
         System.out.println("Указываем некорректный Логин");
@@ -115,6 +126,8 @@ public class LoginCourier {
     }
 
     @Test
+    @DisplayName("Кейс: если какого-то поля нет, запрос возвращает ошибку")
+    @Description("Оставляю поле  Логин пустым .Должен вернуться статус код 404 с телом (message:Недостаточно данных для входа)")
     public void testAuthWithNullField() {
         System.out.println("Кейс: если какого-то поля нет, запрос возвращает ошибку");
 
@@ -133,6 +146,8 @@ public class LoginCourier {
     }
 
     @Test
+    @DisplayName("Кейс:если авторизоваться под несуществующим пользователем, запрос возвращает ошибку")
+    @Description("Указываю несуществующие Логин и Пароль.Должен вернуться статус код 404 с телом (message:Учетная запись не найдена)")
     public void testNonExistUser() {
         System.out.println("Кейс:если авторизоваться под несуществующим пользователем, запрос возвращает ошибку");
 
@@ -151,6 +166,8 @@ public class LoginCourier {
     }
 
     @Test
+    @DisplayName("Кейс:Успешный запрос возвращает id")
+    @Description("Получаю id курьера")
     public void testLoginCourierReturnId() {
         System.out.println("Успешный запрос возвращает id");
 
@@ -171,7 +188,7 @@ public class LoginCourier {
 
 
 
-
+    @Step("Генерирую случайного курьера, что бы использовать в тестах и получаю его id.Чтобы удалять после выполнения тестов" )
     private AuthCourier getCorrectAuth() {
         ArrayList<String> authCourier = createCourier.registerNewCourierAndReturnLoginPassword();
         String myLoginCourier = authCourier.get(0);
@@ -181,6 +198,7 @@ public class LoginCourier {
         System.out.println(auth.id);
         return auth;
     }
+    @Step("Метод получения id курьера" )
     private void saveId(AuthCourier courier){
         int id= given()
                 .header("Content-type", "application/json")

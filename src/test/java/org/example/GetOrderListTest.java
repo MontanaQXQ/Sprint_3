@@ -1,5 +1,7 @@
 package org.example;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import io.restassured.RestAssured;
 import org.junit.Test;
@@ -12,6 +14,7 @@ public class GetOrderListTest {
     String getOrderList = "/api/v1/orders?limit=10&page=0";
 
     @Test
+    @DisplayName("Кейс: Получаю список доступных заказов и  проверяю,что в тело ответа возвращается список заказов.")
     public void testGetOrderList() {
         System.out.println("Кейс: Получаю список доступных заказов и  проверяю,что в тело ответа возвращается список заказов.");
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
