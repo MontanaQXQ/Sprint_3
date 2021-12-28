@@ -3,6 +3,8 @@ package org.example;
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.Response;
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -27,7 +29,9 @@ public class CreateOrderParamTest {
     @Before
     public void setUp() {
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
+        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
     }
+
 
     private final List<String> color;
     private final Matcher<Object> expected;
@@ -67,8 +71,6 @@ public class CreateOrderParamTest {
                         .post(makeOrder);
         response.then().assertThat().statusCode(201).and()
              .body("track", expected);
-        System.out.println(response.getBody().asString());
-        System.out.println(response.getStatusCode());
 
     }
 

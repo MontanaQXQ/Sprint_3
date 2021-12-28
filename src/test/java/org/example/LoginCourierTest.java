@@ -4,6 +4,8 @@ package org.example;
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.Response;
 import io.restassured.RestAssured;
 import org.junit.After;
@@ -29,6 +31,9 @@ public class LoginCourierTest {
     public void setUp() {
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
        currentCourier=getCorrectAuth();
+        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+
+
 
     }
     @Step("Метод @AFTER :Проверяю if (currentCourier.id > 0) тогда   DELETE /api/v1/courier/{curierId}")
@@ -100,7 +105,7 @@ public class LoginCourierTest {
                         response.then().assertThat().statusCode(404)
                         .and().body("message", is("Учетная запись не найдена"));
         System.out.println(response.getBody().asString() + " Авторизация курьера");
-        System.out.println(response.getStatusCode());
+
 
     }
 
@@ -121,7 +126,6 @@ public class LoginCourierTest {
         response.then().assertThat().statusCode(404)
                 .and().body("message", is("Учетная запись не найдена"));
         System.out.println(response.getBody().asString() + " Авторизация курьера");
-        System.out.println(response.getStatusCode());
 
     }
 
@@ -141,7 +145,6 @@ public class LoginCourierTest {
         response.then().assertThat().statusCode(400)
                 .and().body("message", is("Недостаточно данных для входа"));
         System.out.println(response.getBody().asString() + " Авторизация курьера");
-        System.out.println(response.getStatusCode());
 
     }
 
@@ -161,7 +164,6 @@ public class LoginCourierTest {
         response.then().assertThat().statusCode(404)
                 .and().body("message", is("Учетная запись не найдена"));
         System.out.println(response.getBody().asString() + " Авторизация курьера");
-        System.out.println(response.getStatusCode());
 
     }
 
@@ -183,6 +185,24 @@ public class LoginCourierTest {
         assertEquals(id,currentCourier.id);
         System.out.println("Курьер авторизовался." + "\n" + "Айди курьера = " + currentCourier.id);
 
+    }
+
+    @Test
+    @DisplayName("Кейс: система вернёт ошибку, если  не указать логин или пароль")
+    @Description("Указываю null значение для пароля.")
+    public void testSystemErrorWithNullValuePassword() {
+        System.out.println("Кейс: система вернёт ошибку, если  не указать логин или пароль");
+        System.out.println("Указываем - пароль = NULL");
+
+        Response response =
+                given()
+                        .header("Content-type", "application/json")
+                        .and()
+                        .body(new AuthCourier(currentCourier.login,null))
+                        .when()
+                        .post(loginCourier);
+        response.then().assertThat().statusCode(404)
+                .and().body("message", is("Недостаточно данных для входа"));
     }
 
 

@@ -1,5 +1,7 @@
 package org.example;
 
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.Response;
 import io.restassured.RestAssured;
 import org.junit.After;
@@ -23,6 +25,7 @@ public class CreateCourierTest {
     @Before
     public void setUp() {
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
+        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
     }
     @Step("Метод @AFTER :После каждого теста:POST /api/v1/courier/login , если id получен далее выполняю DELETE /api/v1/courier/{curierId}")
@@ -77,9 +80,6 @@ public class CreateCourierTest {
         response.then().assertThat()
                 .statusCode(201)
                 .and().body("ok", is(true));
-        System.out.println(response.getStatusCode());
-
-
 
     }
 
@@ -102,8 +102,8 @@ public class CreateCourierTest {
         response.then().assertThat()
                 .statusCode(201)
                 .and().body("ok", is(true));
-        System.out.println(response.getBody().asString() + " Создал первого курьера");
-        System.out.println(response.getStatusCode());
+        System.out.println(" Создал первого курьера");
+
 
 
             File jsonTwo = new File("src/test/resources/newCourier.json");
@@ -117,8 +117,8 @@ public class CreateCourierTest {
             responseTwo.then().assertThat()
                     .statusCode(409)
                     .and().body(notNullValue());
-            System.out.println(responseTwo.getBody().asString() + "Попытка создать второго курьера с теми же данными");
-            System.out.println(responseTwo.getStatusCode());
+            System.out.println("Попытка создать второго курьера с теми же данными");
+
 
     }
 
@@ -138,7 +138,6 @@ public class CreateCourierTest {
         response.then().assertThat()
                 .statusCode(201)
                 .and().body("ok", is(true));
-        System.out.println(response.getStatusCode());
 
     }
 
@@ -158,8 +157,6 @@ public class CreateCourierTest {
         response.then().assertThat()
                 .statusCode(201)
                 .and().body("ok", is(true));
-        System.out.println(response.getStatusCode());
-
 
     }
 
@@ -179,8 +176,6 @@ public class CreateCourierTest {
         response.then().assertThat()
                 .statusCode(201)
                 .and().body("ok", is(true));
-        System.out.println(response.getStatusCode());
-        System.out.println(response.getBody().asString());
 
     }
 
@@ -200,8 +195,6 @@ public class CreateCourierTest {
          response.then().assertThat()
                 .statusCode(400)
                 .and().body("message", is("Недостаточно данных для создания учетной записи"));
-        System.out.println(response.getStatusCode());
-        System.out.println(response.getBody().asString());
 
     }
 
@@ -222,8 +215,8 @@ public class CreateCourierTest {
             response.then().assertThat()
                     .statusCode(201)
                     .and().body("ok", is(true));
-            System.out.println(response.getBody().asString() + " Создал первого курьера");
-            System.out.println(response.getStatusCode());
+            System.out.println(" Создал первого курьера");
+
 
             File jsonTwo = new File("src/test/resources/sameLoginCourier.json");
             Response responseTwo =
@@ -236,9 +229,7 @@ public class CreateCourierTest {
             responseTwo.then().assertThat()
                     .statusCode(409)
                     .and().body("message", is("Этот логин уже используется"));
-            System.out.println(responseTwo.getBody().asString() + "Попытка создать второго курьера с тем же Логином");
-            System.out.println(responseTwo.getStatusCode());
-
+            System.out.println("Попытка создать второго курьера с тем же Логином");
         }
 
 }
