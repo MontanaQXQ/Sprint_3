@@ -21,6 +21,7 @@ public class CreateCourierTest {
     String createCourier = "/api/v1/courier";
     String deleteCourier = "/api/v1/courier/{curierId}";
 
+
     @Step("Метод setUP:Base URL - http://qa-scooter.praktikum-services.ru/")
     @Before
     public void setUp() {
@@ -67,6 +68,7 @@ public class CreateCourierTest {
     @Description("Обычное создание курьера")
     @Step("Send POST request /api/v1/courier")
     public void testCourierCanCreate() {
+
         System.out.println("Проверяю что курьера можно создать");
         File json = new File("src/test/resources/newCourier.json");
 
