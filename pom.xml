@@ -27,14 +27,7 @@
         <!--Тег scope указывает на область видимости зависимости: она видна только тестовым классам в директории src/test/java-->
         <scope>test</scope>
     </dependency>
-
-    <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.13.2</version>
-        <scope>compile</scope>
-    </dependency>
-
+        
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
@@ -47,12 +40,12 @@
         <artifactId>allure-junit4</artifactId>
         <version>${allure.version}</version>
     </dependency>
-    <dependency>
-        <!-- модуль взаимодействия Allure и RestAssured -->
-        <groupId>io.qameta.allure</groupId>
-        <artifactId>allure-rest-assured</artifactId>
-        <version>${allure.version}</version>
-    </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.0</version>
+        </dependency>
     </dependencies>
         <build>
         <plugins>
